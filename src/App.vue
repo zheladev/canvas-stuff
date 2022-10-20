@@ -11,7 +11,7 @@ import { Ref, ref, onMounted, ComponentInternalInstance } from 'vue';
 import { useCurrencyStore } from './stores/CurrencyStore';
 
 
-const gameName: Ref<string> = ref('Idle Game');
+const gameName: Ref<string> = ref('Canvas stuff');
 const internalInstance = getCurrentInstance() as ComponentInternalInstance;
 
 const stores : Record<string, any> = {
@@ -36,7 +36,7 @@ onMounted(() => {
     window.addEventListener('visibilitychange', switchToUnactiveTab);
     (window as any).stores = stores; //expose stores
 
-    const hooks = Object.values(stores).reduce((pre, curr) => pre.concat(Object.values(curr.frameCalcs).map(fc => fc)),
+    const hooks = Object.values(stores).reduce((pre, curr) => curr.frameCalcs ? pre.concat(Object.values(curr.frameCalcs).map(fc => fc)) : pre,
         [] as Array<(d: number) => void>);
     for (const hook of hooks) {
         internalInstance.appContext.config.globalProperties.$gameLoop.addUpdateHook(hook);
